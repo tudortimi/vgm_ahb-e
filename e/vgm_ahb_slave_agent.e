@@ -18,7 +18,8 @@ package vgm_ahb;
 
 
 unit slave_agent {
-  id : agent_id;
+  const id : agent_id;
+  const mode : agent_mode_e;
 
   smap : slave_smap is instance;
     keep smap.agent_id == id;
@@ -27,14 +28,16 @@ unit slave_agent {
     keep monitor.agent_id == id;
     keep monitor.smap == smap;
 
-  driver : slave_sequence_driver is instance;
-    keep driver.agent_id == id;
+  when ACTIVE {
+    driver : slave_sequence_driver is instance;
+      keep driver.agent_id == id;
 
-  bfm : slave_bfm is instance;
-    keep bfm.agent_id == id;
-    keep bfm.smap == smap;
-    keep bfm.driver == driver;
-    keep bfm.monitor == monitor;
+    bfm : slave_bfm is instance;
+      keep bfm.agent_id == id;
+      keep bfm.smap == smap;
+      keep bfm.driver == driver;
+      keep bfm.monitor == monitor;
+  };
 };
 '>
 
@@ -52,8 +55,13 @@ extend slave_agent {
 
   rerun() is also {
     monitor.rerun();
-    bfm.rerun();
-    driver.rerun();
+  };
+
+  when ACTIVE {
+    rerun() is also {
+      bfm.rerun();
+      driver.rerun();
+    };
   };
 };
 '>

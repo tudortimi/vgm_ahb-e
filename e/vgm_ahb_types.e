@@ -22,4 +22,5 @@ type htrans_e : [ IDLE, BUSY, NONSEQ, SEQ ];
 type hresp_e : [ OKAY, ERROR ];
 
 type agent_id : [];
+type agent_mode_e : [ ACTIVE, PASSIVE ];
 '>
